@@ -203,7 +203,7 @@ export class TweenAction<T> extends ActionInterval {
     }
 
     update (t: number): void {
-        const workerTarget = this.workerTarget ?? this.target;
+        const workerTarget = (this.workerTarget ?? this.target) as T;
         if (!workerTarget) return;
 
         if (!this._opts) return;

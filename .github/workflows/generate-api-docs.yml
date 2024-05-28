@@ -23,12 +23,16 @@ jobs:
       with:
         ref: ${{ github.event.inputs.target_tag }}
 
+    - name: Show ref
+      run: |
+        echo "ref: ${{ github.event.inputs.target_tag }}"
+
     - name: Download external libraries
       run: |
         EXT_VERSION=`grep checkout native/external-config.json | awk -F'"' '{print $4}'`
         git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external native/external
 
-    - name: Install
+    - name: Install Cocos Engine
       run: |
         npm i
 

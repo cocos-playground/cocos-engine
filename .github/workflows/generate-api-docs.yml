@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       target_tag:
-        description: 'Target tag to build API docs'
+        description: 'The ref (branch, tag or commit-id) to build API docs'
         type: string
         default: '3.8.3'
         required: true

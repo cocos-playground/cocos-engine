@@ -1,8 +1,13 @@
 name: Generate API docs JSON
 
 on:
-  push:
   workflow_dispatch:
+    inputs:
+      target_tag:
+        description: 'Target tag to build API docs'
+        type: string
+        default: '3.8.3'
+        required: true
 
 jobs:
   build-api-doc:
@@ -16,7 +21,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        ref: ${{ github.ref }}
+        ref: ${{ github.event.inputs.target_tag }}
 
     - name: Download external libraries
       run: |
@@ -45,7 +50,7 @@ jobs:
         npm run build
         npm run test
         node ./lib/cli.js -p $ENGINE_ROOT -o $ENGINE_ROOT/Cocos-Creator-API.json
-        ls -l
+        ls -l ..
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4

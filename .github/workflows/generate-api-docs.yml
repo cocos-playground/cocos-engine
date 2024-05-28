@@ -2,8 +2,7 @@ name: Generate API docs JSON
 
 on:
   push:
-  release:
-    types: [published]
+  workflow_dispatch:
 
 jobs:
   build-api-doc:
@@ -17,7 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        ref: v3.8.5
+        ref: ${{ github.ref }}
 
     - name: Download external libraries
       run: |
@@ -48,25 +47,9 @@ jobs:
         node ./lib/cli.js -p $ENGINE_ROOT -o $ENGINE_ROOT/Cocos-Creator-API.json
         ls -l
 
-
-    # - name: Pack dist files
-    #   if: github.event_name == 'release'
-    #   uses: thedoctor0/zip-release@main
-    #   with:
-    #     type: 'zip'
-    #     directory: 'build/swig-linux'
-    #     path: '.'
-    #     filename: 'swig-linux.zip'
-    #     exclusions: '*/csharp/* */d/* */go/* */guile/* */java/* */javascript/jsc/* */javascript/v8/* */lua/* */mzscheme/* */ocaml/* */octave/* */perl5/* */php/* */python/* */r/* */ruby/* */scilab/* */tcl/* */xml/*'
-
-    # - name: Upload to Release
-    #   if: github.event_name == 'release'
-    #   uses: svenstaro/upload-release-action@e74ff71f7d8a4c4745b560a485cc5fdb9b5b999d
-    #   with:
-    #     repo_token: ${{ secrets.GITHUB_TOKEN }}
-    #     file: build/swig-linux/swig-linux.zip
-    #     asset_name: swig-linux.zip
-    #     tag: ${{ github.ref }}
-  
-
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with: 
+        name: Cocos-Creator-API.json
+        path: Cocos-Creator-API.json
 

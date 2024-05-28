@@ -8,7 +8,7 @@ on:
 jobs:
   build-api-doc:
     runs-on: ubuntu-latest
-    name: "Build Cocos Engine API documentation"
+    name: "Generate API docs JSON"
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -18,13 +18,14 @@ jobs:
     #     EXT_VERSION=`node ./.github/workflows/get-native-external-version.js`
     #     git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external native/external
 
-    - name: Checkout the tool to generate API docs
+    - name: Checkout the tool
       uses: actions/checkout@v4
       with:
         repository: dumganhar/creator-api-doc
         path: creator-api-doc
+        ref: main
 
-    - name: Generate API Docs JSON
+    - name: Generate
       run: |
         pwd
         ls -l

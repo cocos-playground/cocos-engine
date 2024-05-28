@@ -1,0 +1,51 @@
+name: Generate API docs JSON
+
+on:
+  push:
+  release:
+    types: [published]
+
+jobs:
+  build-api-doc:
+    runs-on: ubuntu-latest
+    name: "Build Cocos Engine API documentation"
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # - name: Download external libraries
+    #   run: |
+    #     EXT_VERSION=`node ./.github/workflows/get-native-external-version.js`
+    #     git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external native/external
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: dumganhar/creator-api-doc
+
+    - name: Generate API Docs JSON
+      run: |
+        pwd
+        ls -l
+
+    # - name: Pack dist files
+    #   if: github.event_name == 'release'
+    #   uses: thedoctor0/zip-release@main
+    #   with:
+    #     type: 'zip'
+    #     directory: 'build/swig-linux'
+    #     path: '.'
+    #     filename: 'swig-linux.zip'
+    #     exclusions: '*/csharp/* */d/* */go/* */guile/* */java/* */javascript/jsc/* */javascript/v8/* */lua/* */mzscheme/* */ocaml/* */octave/* */perl5/* */php/* */python/* */r/* */ruby/* */scilab/* */tcl/* */xml/*'
+
+    # - name: Upload to Release
+    #   if: github.event_name == 'release'
+    #   uses: svenstaro/upload-release-action@e74ff71f7d8a4c4745b560a485cc5fdb9b5b999d
+    #   with:
+    #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+    #     file: build/swig-linux/swig-linux.zip
+    #     asset_name: swig-linux.zip
+    #     tag: ${{ github.ref }}
+  
+
+

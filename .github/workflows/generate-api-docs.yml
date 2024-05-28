@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     name: "Generate API docs JSON"
     steps:
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
         node-version: 18
 
@@ -48,8 +48,8 @@ jobs:
         ls -l
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with: 
-        name: Cocos-Creator-API.json
+        name: Cocos-Creator-API
         path: Cocos-Creator-API.json
 

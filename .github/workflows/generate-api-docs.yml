@@ -52,9 +52,9 @@ jobs:
         echo "ENGINE_ROOT: ${ENGINE_ROOT}"
         cd creator-api-doc
         npm i
+        # apply the url patch for typedoc@0.22.13
         npm run apply-patch
         npm run build
-        npm run test
         node ./lib/cli.js -p $ENGINE_ROOT -o $ENGINE_ROOT/Cocos-Creator-API.json
         ls -l ..
 

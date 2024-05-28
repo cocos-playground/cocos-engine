@@ -18,10 +18,11 @@ jobs:
     #     EXT_VERSION=`node ./.github/workflows/get-native-external-version.js`
     #     git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external native/external
 
-    - name: Checkout
+    - name: Checkout the tool to generate API docs
       uses: actions/checkout@v4
       with:
         repository: dumganhar/creator-api-doc
+        path: creator-api-doc
 
     - name: Generate API Docs JSON
       run: |

@@ -59,13 +59,26 @@ jobs:
         npm run apply-patch
         npm run build
 
-    - name: Patch taobao npm mirror 1
+    - name: Try to switch to Node v14
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        set +e
+        cd creator-api-doc/scripts
+        ./version_compare.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }} "3.8.0"
+        exit_status=$?
+        set -e
+        which nvm
+        nvm install 14
+        nvm use 14
+        nvm alias default 14
+
+    - name: Patch taobao npm mirror
       if: github.event_name == 'workflow_dispatch'
       run: |
         set +e
         ENGINE_ROOT=$(pwd)
         cd creator-api-doc/scripts
-        ./version_compare.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }}
+        ./version_compare.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }} "3.8.3"
         exit_status=$?
         set -e
 
@@ -74,12 +87,8 @@ jobs:
         else
             echo "version_compare.sh failed $exit_status"
             node ./replace-taobao.js $ENGINE_ROOT
-        fi
-
-    - name: Patch taobao npm mirror 2
-      if: github.event_name == 'workflow_dispatch'
-      run: |
-        sed -i 's/nlark/npmmirror/g' package-lock.json
+            sed -i 's/nlark/npmmirror/g' package-lock.json
+        fi    
 
     - name: Download external libraries
       run: |

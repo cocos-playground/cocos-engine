@@ -111,9 +111,9 @@ jobs:
     - name: Install Cocos Engine
       run: |
         export NVM_DIR="$HOME/mynvm"
-        if [ -d "NVM_DIR" ]; then
+        if [ -d "$NVM_DIR" ]; then
           echo "Found NVM_DIR"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+          . "$NVM_DIR/nvm.sh" --no-use
         fi
 
         echo "NODE: $(which node)"

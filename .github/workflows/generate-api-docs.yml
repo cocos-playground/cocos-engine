@@ -67,10 +67,22 @@ jobs:
 
         if [[ "$IS_LESS" == "1" ]]; then
           echo "Version less than 3.8.0"
-          sudo apt install nvm -y
+
+          export NVM_DIR="$HOME/mynvm"
+          git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+          pushd "$NVM_DIR"
+          git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+          popd
+          chmod +x "$NVM_DIR/nvm.sh"
+          . "$NVM_DIR/nvm.sh" --no-use
+          
           nvm install 14
           nvm use 14
           nvm alias default 14
+
+          echo "SETUP_NODE_NVM_NVM: $NVM_DIR/nvm.sh"
+          echo "SETUP_NODE_NVM_NODE: $(which node)"
+          echo "SETUP_NODE_NVM_NPM: $(which npm)"
         fi    
 
     - name: Patch taobao npm mirror
@@ -94,6 +106,11 @@ jobs:
 
     - name: Install Cocos Engine
       run: |
+        export NVM_DIR="$HOME/mynvm"
+        . "$NVM_DIR/nvm.sh" --no-use
+        echo "SETUP_NODE_NVM_NVM: $NVM_DIR/nvm.sh"
+        echo "SETUP_NODE_NVM_NODE: $(which node)"
+        echo "SETUP_NODE_NVM_NPM: $(which npm)"
         npm i
 
     - name: Generate

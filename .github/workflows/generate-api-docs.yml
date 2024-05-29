@@ -65,9 +65,9 @@ jobs:
         cd creator-api-doc/scripts
         eval $(./is-smaller-version.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }} "3.8.0")
 
-        which nvm
-        if [ $IS_LESS -eq 1 ]; then
+        if [[ "$IS_LESS" == "1" ]]; then
           echo "Version less than 3.8.0"
+          sudo apt install nvm -y
           nvm install 14
           nvm use 14
           nvm alias default 14
@@ -79,9 +79,8 @@ jobs:
         ENGINE_ROOT=$(pwd)
         cd creator-api-doc/scripts
         eval $(./is-smaller-version.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }} "3.8.4")
-        exit_status=$?
 
-        if [ $IS_LESS -eq 1 ]; then
+        if [[ "$IS_LESS" == "1" ]]; then
           echo "Version less than 3.8.4"
           node ./replace-taobao.js $ENGINE_ROOT
           sed -i 's/nlark/npmmirror/g' package-lock.json

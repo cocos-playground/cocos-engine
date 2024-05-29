@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       target_tag:
-        description: 'The ref (branch, tag or commit-id) to build API docs'
+        description: 'The ref (branch or tag) to build API docs'
         type: string
         default: '3.8.3'
         required: true
@@ -53,10 +53,11 @@ jobs:
 
     - name: Patch taobao npm mirror 1
       if: github.event_name == 'workflow_dispatch'
+      continue-on-error: true
       run: |
         ENGINE_ROOT=$(pwd)
         cd creator-api-doc/scripts
-        ./version_compare.sh
+        ./version_compare.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }}
         exit_status=$?
 
         if [ $exit_status -eq 0 ]; then

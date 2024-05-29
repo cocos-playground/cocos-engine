@@ -112,10 +112,12 @@ jobs:
       run: |
         export NVM_DIR="$HOME/mynvm"
         if [ -d "NVM_DIR" ]; then
-          . "$NVM_DIR/nvm.sh" --no-use
+          echo "Found NVM_DIR"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
         fi
-        echo "SETUP_NODE_NVM_NODE: $(which node)"
-        echo "SETUP_NODE_NVM_NPM: $(which npm)"
+
+        echo "NODE: $(which node)"
+        echo "NPM: $(which npm)"
         npm i
 
     - name: Generate

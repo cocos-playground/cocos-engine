@@ -102,11 +102,11 @@ jobs:
           echo "No need to patch taobao npm mirror"
         fi    
 
-    - name: Download external libraries
-      run: |
-        EXT_VERSION=`grep checkout native/external-config.json | awk -F'"' '{print $4}'`
-        echo "EXT_VERSION: ${EXT_VERSION}"
-        git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external native/external
+    # - name: Download external libraries
+    #   run: |
+    #     EXT_VERSION=`grep checkout native/external-config.json | awk -F'"' '{print $4}'`
+    #     echo "EXT_VERSION: ${EXT_VERSION}"
+    #     git clone --branch $EXT_VERSION --depth 1 https://github.com/cocos/cocos-engine-external native/external
 
     - name: Install Cocos Engine
       run: |
@@ -114,6 +114,8 @@ jobs:
         if [ -d "$NVM_DIR" ]; then
           echo "Found NVM_DIR"
           . "$NVM_DIR/nvm.sh" --no-use
+          nvm use 14
+          nvm alias default 14
         fi
 
         echo "NODE: $(which node)"

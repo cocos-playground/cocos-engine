@@ -83,6 +83,8 @@ jobs:
           echo "SETUP_NODE_NVM_NVM: $NVM_DIR/nvm.sh"
           echo "SETUP_NODE_NVM_NODE: $(which node)"
           echo "SETUP_NODE_NVM_NPM: $(which npm)"
+        else
+          echo "No need to switch to Node v14"
         fi    
 
     - name: Patch taobao npm mirror
@@ -95,7 +97,9 @@ jobs:
         if [[ "$IS_LESS" == "1" ]]; then
           echo "Version less than 3.8.4"
           node ./replace-taobao.js $ENGINE_ROOT
-          sed -i 's/nlark/npmmirror/g' package-lock.json
+          sed -i 's/nlark/npmmirror/g' $ENGINE_ROOT/package-lock.json
+        else
+          echo "No need to patch taobao npm mirror"
         fi    
 
     - name: Download external libraries
@@ -107,8 +111,9 @@ jobs:
     - name: Install Cocos Engine
       run: |
         export NVM_DIR="$HOME/mynvm"
-        . "$NVM_DIR/nvm.sh" --no-use
-        echo "SETUP_NODE_NVM_NVM: $NVM_DIR/nvm.sh"
+        if [ -d "NVM_DIR" ]; then
+          . "$NVM_DIR/nvm.sh" --no-use
+        fi
         echo "SETUP_NODE_NVM_NODE: $(which node)"
         echo "SETUP_NODE_NVM_NPM: $(which npm)"
         npm i

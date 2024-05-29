@@ -51,6 +51,14 @@ jobs:
         path: creator-api-doc
         ref: main
 
+    - name: Install the tool
+      run: |
+        cd creator-api-doc
+        npm i
+        # apply the url patch for typedoc@0.22.13
+        npm run apply-patch
+        npm run build
+
     - name: Patch taobao npm mirror 1
       if: github.event_name == 'workflow_dispatch'
       run: |
@@ -90,10 +98,6 @@ jobs:
         ENGINE_ROOT=$(pwd)
         echo "ENGINE_ROOT: ${ENGINE_ROOT}"
         cd creator-api-doc
-        npm i
-        # apply the url patch for typedoc@0.22.13
-        npm run apply-patch
-        npm run build
         node ./lib/cli.js -p $ENGINE_ROOT -o $ENGINE_ROOT/Cocos-Creator-API.json
         ls -l ..
 

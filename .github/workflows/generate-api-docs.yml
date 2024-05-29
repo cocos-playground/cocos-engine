@@ -68,9 +68,14 @@ jobs:
         exit_status=$?
         set -e
         which nvm
-        nvm install 14
-        nvm use 14
-        nvm alias default 14
+        if [ $exit_status -eq 0 ]; then
+          echo "version_compare.sh succeed"
+        else
+            echo "version_compare.sh failed $exit_status"
+          nvm install 14
+          nvm use 14
+          nvm alias default 14
+        fi    
 
     - name: Patch taobao npm mirror
       if: github.event_name == 'workflow_dispatch'
@@ -83,11 +88,11 @@ jobs:
         set -e
 
         if [ $exit_status -eq 0 ]; then
-            echo "version_compare.sh succeed"
+          echo "version_compare.sh succeed"
         else
-            echo "version_compare.sh failed $exit_status"
-            node ./replace-taobao.js $ENGINE_ROOT
-            sed -i 's/nlark/npmmirror/g' package-lock.json
+          echo "version_compare.sh failed $exit_status"
+          node ./replace-taobao.js $ENGINE_ROOT
+          sed -i 's/nlark/npmmirror/g' package-lock.json
         fi    
 
     - name: Download external libraries

@@ -70,7 +70,7 @@ jobs:
     - name: Patch taobao npm mirror 2
       if: github.event_name == 'workflow_dispatch'
       run: |
-        echo "replace 2...""
+        echo "replace 2..."
 
     - name: Download external libraries
       run: |

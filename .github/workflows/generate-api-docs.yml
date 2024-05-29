@@ -1,6 +1,10 @@
 name: Generate API docs JSON
 
 on:
+  push:
+    branches-ignore:
+      - '**'
+  pull_request:
   workflow_dispatch:
     inputs:
       target_tag:
@@ -18,14 +22,52 @@ jobs:
       with:
         node-version: 18
 
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.inputs.target_tag }}
+    - name: Get ref
+      id: step-id-get-ref
+      run: |
+        if [ "${{ github.event_name }}" = 'workflow_dispatch' ]; then
+          echo "Get ref from workflow_dispatch"
+          echo "ENGINE_REF=${{ github.event.inputs.target_tag }}" >> $GITHUB_OUTPUT
+        else
+          echo "Get ref from push"
+          echo "ENGINE_REF=${{ github.ref }}" >> $GITHUB_OUTPUT
+        fi
 
     - name: Show ref
       run: |
-        echo "ref: ${{ github.event.inputs.target_tag }}"
+        echo "ref: ${{ steps.step-id-get-ref.outputs.ENGINE_REF }}"
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ steps.step-id-get-ref.outputs.ENGINE_REF }}
+
+    - name: Checkout the tool
+      uses: actions/checkout@v4
+      with:
+        repository: dumganhar/creator-api-doc
+        path: creator-api-doc
+        ref: main
+
+    - name: Patch taobao npm mirror 1
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        ENGINE_ROOT=$(pwd)
+        cd creator-api-doc/scripts
+        ./version_compare.sh
+        exit_status=$?
+
+        if [ $exit_status -eq 0 ]; then
+            echo "version_compare.sh succeed"
+        else
+            echo "version_compare.sh failed $exit_status"
+            node ./replace-taobao.js $ENGINE_ROOT
+        fi
+
+    - name: Patch taobao npm mirror 2
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        echo "replace 2...""
 
     - name: Download external libraries
       run: |
@@ -36,13 +78,6 @@ jobs:
     - name: Install Cocos Engine
       run: |
         npm i
-
-    - name: Checkout the tool
-      uses: actions/checkout@v4
-      with:
-        repository: dumganhar/creator-api-doc
-        path: creator-api-doc
-        ref: main
 
     - name: Generate
       run: |

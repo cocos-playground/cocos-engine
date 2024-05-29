@@ -53,12 +53,13 @@ jobs:
 
     - name: Patch taobao npm mirror 1
       if: github.event_name == 'workflow_dispatch'
-      continue-on-error: true
       run: |
+        set +e
         ENGINE_ROOT=$(pwd)
         cd creator-api-doc/scripts
         ./version_compare.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }}
         exit_status=$?
+        set -e
 
         if [ $exit_status -eq 0 ]; then
             echo "version_compare.sh succeed"

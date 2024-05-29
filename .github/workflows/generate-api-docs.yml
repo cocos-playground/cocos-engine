@@ -12,7 +12,7 @@ on:
       target_tag:
         description: 'The ref (branch or tag) to build API docs'
         type: string
-        default: '3.8.3'
+        default: '3.8.4'
         required: true
 
 jobs:

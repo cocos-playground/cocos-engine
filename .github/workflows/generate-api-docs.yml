@@ -63,7 +63,7 @@ jobs:
       if: github.event_name == 'workflow_dispatch'
       run: |
         cd creator-api-doc/scripts
-        eval $(./is-small-version.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }} "3.8.0")
+        eval $(./is-smaller-version.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }} "3.8.0")
 
         which nvm
         if [ $IS_LESS -eq 1 ]; then
@@ -78,7 +78,7 @@ jobs:
       run: |
         ENGINE_ROOT=$(pwd)
         cd creator-api-doc/scripts
-        eval $(./is-small-version.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }} "3.8.4")
+        eval $(./is-smaller-version.sh ${{ steps.step-id-get-ref.outputs.ENGINE_REF }} "3.8.4")
         exit_status=$?
 
         if [ $IS_LESS -eq 1 ]; then

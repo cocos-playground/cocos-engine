@@ -115,6 +115,8 @@ jobs:
 
     - name: Generate
       run: |
+        which node
+        node --version
         pwd
         ls -l
         ENGINE_ROOT=$(pwd)

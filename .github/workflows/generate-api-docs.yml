@@ -79,7 +79,7 @@ jobs:
     - name: Patch taobao npm mirror 2
       if: github.event_name == 'workflow_dispatch'
       run: |
-        echo "replace 2..."
+        sed -i 's/nlark/npmmirror/g' package-lock.json
 
     - name: Download external libraries
       run: |
